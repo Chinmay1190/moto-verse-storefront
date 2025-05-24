@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Package, CheckCircle, Clock, Truck, BadgeIndianRupee, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -106,9 +105,11 @@ const Orders = () => {
                   Continue Shopping
                 </a>
               </Button>
-              <Button variant="outline" className="border-green-200 text-green-700 hover:bg-green-50 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-950/20 hover-scale">
-                <Truck className="mr-2 h-4 w-4" />
-                Track Order
+              <Button asChild variant="outline" className="border-green-200 text-green-700 hover:bg-green-50 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-950/20 hover-scale">
+                <Link to="/track-order">
+                  <Truck className="mr-2 h-4 w-4" />
+                  Track Order
+                </Link>
               </Button>
             </div>
 
@@ -176,7 +177,15 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-orbitron font-bold mb-8">My Orders</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-orbitron font-bold">My Orders</h1>
+        <Button asChild variant="outline">
+          <Link to="/track-order">
+            <Truck className="mr-2 h-4 w-4" />
+            Track Order
+          </Link>
+        </Button>
+      </div>
 
       <div className="space-y-6">
         {sampleOrders.map((order) => (
@@ -224,8 +233,10 @@ const Orders = () => {
                   View Details
                 </Button>
                 {order.status !== 'Delivered' && (
-                  <Button variant="outline" size="sm" className="hover-scale">
-                    Track Order
+                  <Button asChild variant="outline" size="sm" className="hover-scale">
+                    <Link to="/track-order">
+                      Track Order
+                    </Link>
                   </Button>
                 )}
                 {order.status === 'Delivered' && (

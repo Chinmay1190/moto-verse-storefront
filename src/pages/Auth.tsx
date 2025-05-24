@@ -38,8 +38,91 @@ const Auth = () => {
     confirmPassword: ''
   });
 
+  const [loginErrors, setLoginErrors] = useState({
+    email: '',
+    password: ''
+  });
+
+  const [registerErrors, setRegisterErrors] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateLoginForm = () => {
+    const errors = { email: '', password: '' };
+    let isValid = true;
+
+    if (!loginForm.email) {
+      errors.email = 'Email is required';
+      isValid = false;
+    } else if (!validateEmail(loginForm.email)) {
+      errors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!loginForm.password) {
+      errors.password = 'Password is required';
+      isValid = false;
+    } else if (loginForm.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    setLoginErrors(errors);
+    return isValid;
+  };
+
+  const validateRegisterForm = () => {
+    const errors = { name: '', email: '', password: '', confirmPassword: '' };
+    let isValid = true;
+
+    if (!registerForm.name.trim()) {
+      errors.name = 'Name is required';
+      isValid = false;
+    }
+
+    if (!registerForm.email) {
+      errors.email = 'Email is required';
+      isValid = false;
+    } else if (!validateEmail(registerForm.email)) {
+      errors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!registerForm.password) {
+      errors.password = 'Password is required';
+      isValid = false;
+    } else if (registerForm.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    if (!registerForm.confirmPassword) {
+      errors.confirmPassword = 'Please confirm your password';
+      isValid = false;
+    } else if (registerForm.password !== registerForm.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+      isValid = false;
+    }
+
+    setRegisterErrors(errors);
+    return isValid;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateLoginForm()) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -61,21 +144,7 @@ const Auth = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (registerForm.password !== registerForm.confirmPassword) {
-      toast({
-        title: "Password Mismatch",
-        description: "Passwords do not match. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (registerForm.password.length < 6) {
-      toast({
-        title: "Weak Password",
-        description: "Password must be at least 6 characters long.",
-        variant: "destructive",
-      });
+    if (!validateRegisterForm()) {
       return;
     }
 
@@ -102,6 +171,7 @@ const Auth = () => {
       email: 'demo@superbikespro.com',
       password: 'demo123'
     });
+    setLoginErrors({ email: '', password: '' });
   };
 
   return (
@@ -142,11 +212,17 @@ const Auth = () => {
                         type="email"
                         placeholder="Enter your email"
                         value={loginForm.email}
-                        onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
-                        className="pl-10"
+                        onChange={(e) => {
+                          setLoginForm(prev => ({ ...prev, email: e.target.value }));
+                          if (loginErrors.email) setLoginErrors(prev => ({ ...prev, email: '' }));
+                        }}
+                        className={`pl-10 ${loginErrors.email ? 'border-red-500' : ''}`}
                         required
                       />
                     </div>
+                    {loginErrors.email && (
+                      <p className="text-red-500 text-sm">{loginErrors.email}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -158,8 +234,11 @@ const Auth = () => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Enter your password"
                         value={loginForm.password}
-                        onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
-                        className="pl-10 pr-10"
+                        onChange={(e) => {
+                          setLoginForm(prev => ({ ...prev, password: e.target.value }));
+                          if (loginErrors.password) setLoginErrors(prev => ({ ...prev, password: '' }));
+                        }}
+                        className={`pl-10 pr-10 ${loginErrors.password ? 'border-red-500' : ''}`}
                         required
                       />
                       <Button
@@ -172,6 +251,9 @@ const Auth = () => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
+                    {loginErrors.password && (
+                      <p className="text-red-500 text-sm">{loginErrors.password}</p>
+                    )}
                   </div>
 
                   <Button 
@@ -204,11 +286,17 @@ const Auth = () => {
                         type="text"
                         placeholder="Enter your full name"
                         value={registerForm.name}
-                        onChange={(e) => setRegisterForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="pl-10"
+                        onChange={(e) => {
+                          setRegisterForm(prev => ({ ...prev, name: e.target.value }));
+                          if (registerErrors.name) setRegisterErrors(prev => ({ ...prev, name: '' }));
+                        }}
+                        className={`pl-10 ${registerErrors.name ? 'border-red-500' : ''}`}
                         required
                       />
                     </div>
+                    {registerErrors.name && (
+                      <p className="text-red-500 text-sm">{registerErrors.name}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -220,11 +308,17 @@ const Auth = () => {
                         type="email"
                         placeholder="Enter your email"
                         value={registerForm.email}
-                        onChange={(e) => setRegisterForm(prev => ({ ...prev, email: e.target.value }))}
-                        className="pl-10"
+                        onChange={(e) => {
+                          setRegisterForm(prev => ({ ...prev, email: e.target.value }));
+                          if (registerErrors.email) setRegisterErrors(prev => ({ ...prev, email: '' }));
+                        }}
+                        className={`pl-10 ${registerErrors.email ? 'border-red-500' : ''}`}
                         required
                       />
                     </div>
+                    {registerErrors.email && (
+                      <p className="text-red-500 text-sm">{registerErrors.email}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -236,8 +330,11 @@ const Auth = () => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Create a password"
                         value={registerForm.password}
-                        onChange={(e) => setRegisterForm(prev => ({ ...prev, password: e.target.value }))}
-                        className="pl-10 pr-10"
+                        onChange={(e) => {
+                          setRegisterForm(prev => ({ ...prev, password: e.target.value }));
+                          if (registerErrors.password) setRegisterErrors(prev => ({ ...prev, password: '' }));
+                        }}
+                        className={`pl-10 pr-10 ${registerErrors.password ? 'border-red-500' : ''}`}
                         required
                       />
                       <Button
@@ -250,6 +347,9 @@ const Auth = () => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
+                    {registerErrors.password && (
+                      <p className="text-red-500 text-sm">{registerErrors.password}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -261,11 +361,17 @@ const Auth = () => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Confirm your password"
                         value={registerForm.confirmPassword}
-                        onChange={(e) => setRegisterForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        className="pl-10"
+                        onChange={(e) => {
+                          setRegisterForm(prev => ({ ...prev, confirmPassword: e.target.value }));
+                          if (registerErrors.confirmPassword) setRegisterErrors(prev => ({ ...prev, confirmPassword: '' }));
+                        }}
+                        className={`pl-10 ${registerErrors.confirmPassword ? 'border-red-500' : ''}`}
                         required
                       />
                     </div>
+                    {registerErrors.confirmPassword && (
+                      <p className="text-red-500 text-sm">{registerErrors.confirmPassword}</p>
+                    )}
                   </div>
 
                   <Button 
