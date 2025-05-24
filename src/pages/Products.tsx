@@ -160,7 +160,7 @@ const Products = () => {
               <Checkbox 
                 id={brand}
                 checked={filters.brands.includes(brand)}
-                onChec":{" checked={" checked", label={" checked"}) => handleBrandChange(brand, checked)}
+                onCheckedChange={(checked) => handleBrandChange(brand, checked as boolean)}
               />
               <Label htmlFor={brand} className="text-sm font-normal cursor-pointer">
                 {brand}
@@ -179,7 +179,7 @@ const Products = () => {
               <Checkbox 
                 id={category}
                 checked={filters.categories.includes(category)}
-                onChe">onCheckedChange":{""checkedChange={" checked"}) => handleCategoryChange(category, checked)}
+                onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
               />
               <Label htmlFor={category} className="text-sm font-normal cursor-pointer">
                 {category}
@@ -194,7 +194,7 @@ const Products = () => {
         <Checkbox 
           id="inStock"
           checked={filters.inStock}
-          onCheckedChange={(checked) => setFilters(prev => ({ ...prev, inStock: checked }))}
+          onCheckedChange={(checked) => setFilters(prev => ({ ...prev, inStock: checked as boolean }))}
         />
         <Label htmlFor="inStock" className="text-sm font-normal cursor-pointer">
           In Stock Only
