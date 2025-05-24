@@ -20,7 +20,7 @@ const Index = () => {
       subtitle: "Premium Superbikes Collection",
       description: "Discover the world's most powerful and technologically advanced motorcycles. From track-focused superbikes to comfortable touring machines.",
       cta: "Explore Collection",
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1558618666-fbd1c26c7cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       highlight: "70+ Premium Models"
     },
     {
@@ -28,7 +28,7 @@ const Index = () => {
       subtitle: "India's #1 Superbike Destination",
       description: "We bring you certified authentic motorcycles from world-renowned manufacturers with comprehensive warranty and expert support.",
       cta: "View Brands",
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       highlight: "Authorized Dealer"
     },
     {
@@ -36,7 +36,7 @@ const Index = () => {
       subtitle: "Easy EMI Options Available",
       description: "Make your superbike dreams a reality with our flexible financing options. Low down payments and competitive interest rates.",
       cta: "Check Finance",
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       highlight: "0% Interest Available"
     }
   ];
@@ -81,36 +81,46 @@ const Index = () => {
   return (
     <div className="space-y-0">
       {/* Hero Section */}
-      <section className="relative h-[90vh] overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+      <section className="relative h-[90vh] overflow-hidden">
+        {/* Background Image with Parallax Effect */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out transform scale-105"
+          style={{
+            backgroundImage: `url(${heroSlides[currentSlide].image})`,
+            filter: 'brightness(0.4)'
+          }}
+        />
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
         
         <div className="relative container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl space-y-8 animate-fade-in">
             <div className="space-y-2">
-              <Badge className="bg-superbike-500 hover:bg-superbike-600 text-white">
+              <Badge className="bg-superbike-500 hover:bg-superbike-600 text-white animate-pulse-glow">
                 {heroSlides[currentSlide].highlight}
               </Badge>
-              <h1 className="text-5xl md:text-7xl font-orbitron font-bold text-white leading-tight">
+              <h1 className="text-5xl md:text-7xl font-orbitron font-bold text-white leading-tight animate-fade-in">
                 {heroSlides[currentSlide].title}
               </h1>
-              <h2 className="text-2xl md:text-3xl font-semibold text-superbike-400">
+              <h2 className="text-2xl md:text-3xl font-semibold text-superbike-400 animate-fade-in">
                 {heroSlides[currentSlide].subtitle}
               </h2>
             </div>
             
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed animate-fade-in">
               {heroSlides[currentSlide].description}
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in">
               <Link to="/products">
-                <Button size="lg" className="bg-superbike-500 hover:bg-superbike-600 text-white group">
+                <Button size="lg" className="bg-superbike-500 hover:bg-superbike-600 text-white group hover-scale">
                   {heroSlides[currentSlide].cta}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link to="/brands">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black hover-scale">
                   Explore Brands
                 </Button>
               </Link>
@@ -124,8 +134,8 @@ const Index = () => {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentSlide ? 'bg-superbike-500' : 'bg-white/30'
+              className={`w-3 h-3 rounded-full transition-all duration-300 hover-scale ${
+                index === currentSlide ? 'bg-superbike-500 scale-125' : 'bg-white/30'
               }`}
             />
           ))}
@@ -137,7 +147,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center space-y-3">
+              <div key={index} className="text-center space-y-3 hover-scale">
                 <stat.icon className="h-8 w-8 mx-auto" />
                 <div className="text-3xl font-bold font-orbitron">{stat.value}</div>
                 <div className="text-superbike-100">{stat.label}</div>
@@ -168,7 +178,7 @@ const Index = () => {
 
           <div className="text-center mt-12">
             <Link to="/products">
-              <Button size="lg" className="bg-superbike-500 hover:bg-superbike-600 text-white">
+              <Button size="lg" className="bg-superbike-500 hover:bg-superbike-600 text-white hover-scale">
                 View All Products
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -189,7 +199,7 @@ const Index = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             {brands.slice(0, 10).map((brand, index) => (
-              <div key={index} className="flex items-center justify-center p-6 bg-background rounded-lg hover:shadow-lg transition-shadow">
+              <div key={index} className="flex items-center justify-center p-6 bg-background rounded-lg hover:shadow-lg transition-shadow hover-scale">
                 <span className="text-xl font-bold text-muted-foreground hover:text-superbike-500 transition-colors">
                   {brand}
                 </span>
@@ -278,13 +288,13 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/products">
-              <Button size="lg" className="bg-white text-superbike-500 hover:bg-gray-100">
+              <Button size="lg" className="bg-white text-superbike-500 hover:bg-gray-100 hover-scale">
                 Browse Motorcycles
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link to="/contact">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-superbike-500">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-superbike-500 hover-scale">
                 Get Expert Advice
               </Button>
             </Link>
